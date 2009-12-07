@@ -1,0 +1,54 @@
+===================
+Django form widgets
+===================
+
+This is a Django application that provides access to widgets at the template
+layer. Specifically, it allows modifications to the presentation of a form
+to occur in the presentation layer. This is done through the use of the
+`as_widget` filter.
+
+A library of widgets is maintained in `form_widgets.loading.library`. Explicit
+registration of widgets is required, with the exception that built-in widgets
+are registered automatically.
+
+
+Installation
+------------
+Simply ensure that the django-form-widgets package is on your Python path and
+that 'form_widgets' is in your INSTALLED_APPS.
+
+
+Usage
+-----
+
+To use a modified widget in a template:
+
+    {% load form_widgets %}
+    {{ form.password.label_tag }}{{ form.password|as_widget:"password" }}
+
+This will cause the form.password input to be rendered with the built-in
+PasswordInput widget.
+
+To register a new widget:
+
+    from form_widgets.loading import library
+    library.register(MyAwesomeWidget)
+
+Optionally, a `name` keyword argument may be specified to provide a more
+friendly name for use in the template. If no name is specified, the class name
+will be used. A `truncate` keyword argument is allowed as well, which will
+direct registration to truncate that value from the end of the class name. By
+default, `truncate` is set to `Widget`. Thus, the directive above would
+register `MyAwesomeWidget` under the name `MyAwesome`.
+
+For ease of use, it is recommended that all names be specified explicitly and
+that a lowercase convention be used.
+
+
+Default widgets
+---------------
+By default, all built-in Django widgets are registered (with the exception of
+widgets used in the admin contrib app).
+
+They are registered under names designed to speed development. A complete list
+of these names can be found in `form_widgets.loading.NAME_TRANSFORMS`.
